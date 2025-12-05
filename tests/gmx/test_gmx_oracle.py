@@ -9,7 +9,7 @@ import logging
 import pytest
 import requests
 import os
-
+from urllib.parse import urlparse
 from eth_defi.gmx.core.oracle import OraclePrices
 
 
@@ -20,9 +20,9 @@ def test_oracle_initialization(chain_name):
     assert "/signed_prices/latest" in oracle.oracle_url
 
     if chain_name == "arbitrum":
-        assert "arbitrum-api.gmxinfra.io" in oracle.oracle_url
+        assert urlparse(oracle.oracle_url).hostname == "arbitrum-api.gmxinfra.io"
     elif chain_name == "avalanche":
-        assert "avalanche-api.gmxinfra.io" in oracle.oracle_url
+        assert urlparse(oracle.oracle_url).hostname == "avalanche-api.gmxinfra.io"
 
 
 @pytest.mark.parametrize("invalid_chain", ["ethereum", "polygon", "bsc", ""])
